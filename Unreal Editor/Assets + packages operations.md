@@ -5,12 +5,21 @@
 const FAssetRegistryModule& AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
 
 TArray<FAssetData> AssetsData;
-AssetRegistry.GetAssetsByClass(UAssetClass::StaticClass()->GetFName(), AssetsData, bSearchSubClasses);
+AssetRegistryModule.GetAssetsByClass(UAssetClass::StaticClass()->GetFName(), AssetsData, bSearchSubClasses);
 
-for (FAssetData& AssetData : AssetsData)
+for (const FAssetData& AssetData : AssetsData)
 {
 	UAssetClass* Asset = Cast<UAssetClass>(AssetData.GetAsset());
 }
+```
+
+#### Get assets by package
+```cpp
+const FAssetRegistryModule& AssetRegistryModule =  FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
+IAssetRegistry& AssetRegistry = AssetRegistryModule.Get();
+
+TArray<FAssetData> AssetsData;
+AssetRegistry.GetAssetsByPackageName(Package->GetFName(), AssetsData, bIncludeOnlyOnDiskAssets);
 ```
 
 #### Load package
@@ -42,10 +51,27 @@ UAssetClass* Asset = LoadObject<UAssetClass>(Package, *AssetPath)
 UAssetClass* Asset = NewObject<UAssetClass>(Package, *AssetName, RF_Public | RF_Standalone);
 ```
 
+#### Rename asset
+```cpp
+TSet<UPackage*> ObjectsUserRefusedToFullyLoad;
+FText ErrorMessage;
+ObjectTools::FPackageGroupName PGN;
+PGN.ObjectName = TEXT("smthg");
+PGN.GroupName = TEXT("");
+PGN.PackageName = TEXT("smthg");
+ObjectTools::RenameSingleObject(Package, PGN, ObjectsUserRefusedToFullyLoad, ErrorMessage);
+```
+
 #### Save asset
 ```cpp
-const FString SoundPackageName = FPackageName::LongPackageNameToFilename(Package->GetPathName(), FPackageName::GetAssetPackageExtension());
+const FString PackageName = FPackageName::LongPackageNameToFilename(Package->GetPathName(), FPackageName::GetAssetPackageExtension());
 UPackage::SavePackage(Package, Asset, EObjectFlags::RF_Public | EObjectFlags::RF_Standalone, *PackageName);
+```
+
+#### Save package
+```cpp
+TArray<UPackage*> PackagesToSave;
+FEditorFileUtils::PromptForCheckoutAndSave(PackagesToSave, bCheckDirty, bPromptToSave);
 ```
 
 #### Remove asset from package
