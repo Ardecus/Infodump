@@ -1,0 +1,3 @@
+```cpp
+GEditor->GetEditorWorldContext().World()
+```
