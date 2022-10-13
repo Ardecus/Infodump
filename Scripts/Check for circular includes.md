@@ -34,7 +34,7 @@ class Graph():
 			if node not in visited:
 				self.print_cycles_util(node,visited,recStack)
 
-include_regex = re.compile('#include\s+["<"](.*)[">]')
+include_regex = re.compile('#include\s+["<](.*)[">]')
 valid_extensions = ['.h', '.hpp']
 
 def normalize(path):
