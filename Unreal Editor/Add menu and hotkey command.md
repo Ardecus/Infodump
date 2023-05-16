@@ -10,6 +10,8 @@ public:
 	{}
 
 	TSharedPtr<FUICommandInfo> MenuCommand;
+	TSharedPtr<FUICommandInfo> KeyboardCommand;
+	TSharedPtr<FUICommandInfo> SpecialKeyCommand;
 
 	void RegisterCommands() override;
 };
@@ -22,7 +24,12 @@ More on styles l8r
 
 void FCustomEditorCommands::RegisterCommands()
 {
+	// Menu/toolbar button
 	UI_COMMAND(MenuCommand, CommandText, CommandTooltip, EUserInterfaceActionType::Button, FInputChord());
+	// Hotkey - keyboard
+	UI_COMMAND(KeyboardCommand, CommandText, CommandTooltip, EUserInterfaceActionType::None, FInputChord(FKey("F"), bShift, bCtrl, bAlt, bCmd)));
+	// Hotkey - special buttons
+	UI_COMMAND(SpecialKeyCommand, CommandText, CommandTooltip, EUserInterfaceActionType::None, FInputChord(EKeys::SpaceBar));
 }
 ```
 
