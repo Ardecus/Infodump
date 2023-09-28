@@ -1,0 +1,3 @@
+```cpp
+StaticEnum<EMyEnum>()
+```
